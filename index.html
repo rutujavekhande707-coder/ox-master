@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    #board {
+        width: 300px;
+        height: 300px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        margin: auto;
+        gap: 5px;
+    }
+
+    .cell {
+        background: wheat;
+        font-size: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .cell:hover {
+        background: beige;
+    }
+
+    #message {
+        margin-top: 20px;
+        font-size: 22px;
+    }
+</style>
+
+<body>
+    <h1>TIC - TAC - TOE</h1>
+    <div id="board">
+        <div class="cell" onclick="play(this,0)"></div>
+        <div class="cell" onclick="play(this,1)"></div>
+        <div class="cell" onclick="play(this,2)"></div>
+        <div class="cell" onclick="play(this,3)"></div>
+        <div class="cell" onclick="play(this,4)"></div>
+        <div class="cell" onclick="play(this,5)"></div>
+        <div class="cell" onclick="play(this,6)"></div>
+        <div class="cell" onclick="play(this,7)"></div>
+        <div class="cell" onclick="play(this,8)"></div>
+    </div>
+    <p id="message"></p>
+    <script>
+        let board = ["", "", "", "", "", "", "", "", ""]
+        let currentPlayer = "X";
+        let gameover = false;
+
+        function play(cell, index) {
+            if (gameover || board[index] !== "") return;
+
+            board[index] = currentPlayer;
+            cell.textContent = currentPlayer;
+
+            let win = checkWin()
+            if (win) {
+                document.getElementById("message").textContent = currentPlayer + "win!";
+                gameover = true;
+                let cells = document.querySelectorAll(".cell");
+                const [a, b, c] = win;
+                cells[a].style.background = "green";
+                cells[b].style.background = "green";
+                cells[c].style.background = "green"
+                return;
+            }
+            if (!board.includes("")) {
+                document.getElementById("message").textContent = "It`s a draw!"
+                gameover = true;
+                return;
+            }
+            currentPlayer = currentPlayer === "X" ? "O" : "X"
+        }
+        function checkWin() {
+            let wins = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ]
+            for (let w of wins) {
+                let [a, b, c] = w;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return w;
+                }
+            }
+            return false
+        }
+    </script>
+
+
+</body>
+
+</html>
